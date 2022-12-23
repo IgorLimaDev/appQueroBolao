@@ -16,11 +16,12 @@ export function LoginPage() {
   				placeholder='Código do Catálogo'
 				onChangeText={txt1 => setCodigoCatalogo(txt1)}
 			/>
-			
+
 			<TextInput
   				placeholder='Código do Vendedor'
 				onChangeText={txt2 => setCodigoVendedor(txt2)}
 			/>
+
 
 			<Button
   				title="Entrar no Catálogo"
