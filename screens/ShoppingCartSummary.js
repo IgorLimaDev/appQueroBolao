@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
+import {cart,retrieveCart , pushCart} from "../services/Cart.js";
 
-const ShoppingCartSummary = ({ items }) => {
+export function ShoppingCartSummary() {
   const [total, setTotal] = useState(0);
+  const [items, setItems] = useState([]);
 
-  useEffect(() => {
-    let newTotal = 0;
-    items.forEach(item => {
-      newTotal += item.price * item.quantity;
-    });
-    setTotal(newTotal);
-  }, [items]);
+	
+useEffect(() => {
+	retrieveCart().then((res) => {
+		setItems(res);
+	});
+
+	let newTotal = 0;
+	items.forEach(item => {
+	  newTotal += parseInt(item.preco);
+	});
+	setTotal(newTotal);
+
+}, [items]);
 
   return (
     <View style={styles.container}>
@@ -19,8 +27,8 @@ const ShoppingCartSummary = ({ items }) => {
         keyExtractor={item => item.id}
         renderItem={({ item }) => (
           <View style={styles.item}>
-            <Text style={styles.name}>{item.name}</Text>
-            <Text style={styles.price}>{item.price} x {item.quantity}</Text>
+            <Text style={styles.name}>{item.nome}</Text>
+            <Text style={styles.price}>{item.preco} x {/*item.quantity*/ 1}</Text>
           </View>
         )}
       />

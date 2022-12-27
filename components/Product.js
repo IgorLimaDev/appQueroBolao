@@ -1,7 +1,14 @@
 import React from "react";
-import {Text, Image, View, StyleSheet, TouchableOpacity} from "react-native";
+import {Text, Image, View, Button, StyleSheet, TouchableOpacity, Alert} from "react-native";
+import {cart, pushCart, retrieveCart} from "../services/Cart.js";
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export function Product({nome, preco, path, onPress}) {
+export function Product({id, nome, preco, path, onPress}) {
+	const navigation = useNavigation();
+
+
+
 	return (
 		<TouchableOpacity
 		style={styles.card}
@@ -14,6 +21,13 @@ export function Product({nome, preco, path, onPress}) {
 				<Text style={styles.price}>R${preco}</Text>
 
 			</View>
+			<Button
+  				title="Adicionar ao Carrinho"
+				onPress={() => {
+					pushCart({id: id, nome: nome, preco: preco});
+				}}
+			/>
+			
 		</TouchableOpacity>
 	)
 }
@@ -45,3 +59,19 @@ const styles = StyleSheet.create({
 		marginBottom: 8
 	}
 })
+
+/*
+				//Alert.alert(
+					//	"Alert Title",
+					//	"My Alert Msg",
+					//	[
+					//	  {
+					//		text: "Cancel",
+					//		onPress: () => console.log("Cancel Pressed"),
+					//		style: "cancel"
+					//	  },
+					//	  { text: "OK", onPress: () => console.log("OK Pressed") }
+					//	]
+					// );
+
+*/

@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from "react";
-import {View, Text, FlatList, StyleSheet} from "react-native";
+import {View, Text, FlatList, StyleSheet, Alert, Button} from "react-native";
 import { getProducts } from "../services/ProductsServices";
 import { Product } from "../components/Product";
+import {cart, pushCart, retrieveCart} from "../services/Cart.js";
+
 
 export function ProductsList({ route, navigation }) {
 	const { vendedor, catalogo } = route.params;
@@ -10,7 +12,7 @@ export function ProductsList({ route, navigation }) {
 			<Product
 				{...product}
 				onPress={() => {
-					navigation.navigate("ProductDetails", {productId: product.Id})
+					
 				}}
 			/>
 		)
@@ -34,6 +36,24 @@ export function ProductsList({ route, navigation }) {
  
 	useEffect(() => {
 		trazerProdutos();
+		retrieveCart().then((res) => {
+			navigation.setOptions({
+				headerRight: () => {
+					let len = res.length;
+					return (
+					  <Button
+						style={styles.cartIcon}
+						onPress={() => navigation.navigate("Carrinho de Compras")}
+						title={"Carrinho ("+len+")"}
+					  />
+					)
+			},
+			  });
+
+		});
+
+
+
 	})
 
 	return (
@@ -50,10 +70,13 @@ export function ProductsList({ route, navigation }) {
 	) 
 }
 
-
 const styles = StyleSheet.create({
 	productList: {
 		backgroundColor: "#eeeeee"
+	},
+	cartIcon: {
+		backgroundColor:"#000",
+		color:"#000"
 	},
 	productsListContainer: {
 		backgroundColor: "#eeeeee",
@@ -61,3 +84,39 @@ const styles = StyleSheet.create({
 		marginHorizontal: 8
 	}
 })
+
+/* 
+Exemplo de icone no header:
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { Ionicons } from '@expo/vector-icons';
+
+import ShoppingCartScreen from './ShoppingCartScreen';
+
+const ShoppingCartButton = props => {
+  return (
+    <HeaderButtons HeaderButtonComponent={Ionicons}>
+      <Item
+        title="Cart"
+        iconName="ios-cart"
+        onPress={() => props.navigation.navigate('ShoppingCart')}
+      />
+    </HeaderButtons>
+  );
+};
+
+const AppNavigator = createStackNavigator(
+  {
+    ShoppingCart: ShoppingCartScreen,
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => ({
+      headerRight: () => <ShoppingCartButton navigation={navigation} />,
+    }),
+  },
+);
+
+export default createAppContainer(AppNavigator);
+
+*/
