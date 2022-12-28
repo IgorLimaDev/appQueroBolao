@@ -8,9 +8,9 @@ AsyncStorage is a simple, asynchronous, persistent, key-value storage system tha
 Here is an example of a function that stores the shopping cart information in AsyncStorage:
 */
 
-	function initCart() {
-		if(!AsyncStorage.getItem('cart')) {
-			AsyncStorage.setItem('cart', "[]");
+	async function initCart() {
+		if(!await AsyncStorage.getItem('cart')) {
+			await AsyncStorage.setItem('cart', "[]");
 		} 
 	}
 
@@ -25,6 +25,12 @@ Here is an example of a function that stores the shopping cart information in As
 		}
 	  };
 	  
+
+	  export async function clearCart() {
+		
+		await AsyncStorage.setItem('cart', "[]");
+	  }
+
 	  export async function pushCart(prod) {
 		initCart();
 		let cart = await AsyncStorage.getItem('cart');

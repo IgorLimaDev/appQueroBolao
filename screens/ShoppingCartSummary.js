@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
-import {cart,retrieveCart , pushCart} from "../services/Cart.js";
+import { View, Text, FlatList, StyleSheet, Button , Alert} from 'react-native';
+import {cart,retrieveCart , pushCart, clearCart} from "../services/Cart.js";
 
 export function ShoppingCartSummary() {
   const [total, setTotal] = useState(0);
@@ -33,6 +33,13 @@ useEffect(() => {
         )}
       />
       <Text style={styles.total}>Total: {total}</Text>
+	  <Button
+  				title="Limpar Carrinho"
+				onPress={() => {
+					clearCart();	
+					Alert.alert("Sucesso", "Produto limpo com sucesso.");
+				}}
+			/>
     </View>
   );
 };

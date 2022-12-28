@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {View, Text, FlatList, StyleSheet, Alert, Button} from "react-native";
+import {View, Text, FlatList, StyleSheet, Alert, Button, TouchableOpacity, Image} from "react-native";
 import { getProducts } from "../services/ProductsServices";
 import { Product } from "../components/Product";
 import {cart, pushCart, retrieveCart} from "../services/Cart.js";
@@ -18,7 +18,9 @@ export function ProductsList({ route, navigation }) {
 		)
 	}
 
+
 	const [products, setProducts] = useState([]);
+	const [carrinho, setCarrinho] = useState([]);
 
 	const trazerProdutos = async () => {
 		if(!products.length) {
@@ -35,26 +37,47 @@ export function ProductsList({ route, navigation }) {
 	}
  
 	useEffect(() => {
-		trazerProdutos();
-		retrieveCart().then((res) => {
-			navigation.setOptions({
-				headerRight: () => {
-					let len = res.length;
-					return (
-					  <Button
-						style={styles.cartIcon}
-						onPress={() => navigation.navigate("Carrinho de Compras")}
-						title={"Carrinho ("+len+")"}
-					  />
-					)
-			},
-			  });
-
+		trazerProdutos().then(() => {
+			retrieveCart().then((res) => {
+				setCarrinho(res)
+			});
 		});
-
-
-
 	})
+
+	navigation.setOptions({
+		headerRight: () => {
+			if(!carrinho) {
+				return (
+					<TouchableOpacity 
+					style={styles.cartIcon}
+					onPress={() => navigation.navigate("Carrinho de Compras")}
+					>
+					<View>
+					
+					<Text><Image source={require('../assets/icons/shopping-cart.png')}  style={styles.img}/> {"(0)"}</Text>
+					</View>
+				</TouchableOpacity>
+				)
+
+			} else {
+				let len = carrinho.length;
+				return (
+					<TouchableOpacity 
+					style={styles.cartIcon}
+					onPress={() => navigation.navigate("Carrinho de Compras")}
+					>
+					<View>
+					
+					<Text><Image source={require('../assets/icons/shopping-cart.png')}  style={styles.img}/> {"("+len+")"}</Text>
+					</View>
+				</TouchableOpacity>
+				)
+
+			}
+		
+
+	},
+	});
 
 	return (
 		<View>
@@ -75,12 +98,16 @@ const styles = StyleSheet.create({
 		backgroundColor: "#eeeeee"
 	},
 	cartIcon: {
-		backgroundColor:"#000",
+		backgroundColor:"#fff",
 		color:"#000"
+	},
+	img: {
+		width:15,
+		height:15
 	},
 	productsListContainer: {
 		backgroundColor: "#eeeeee",
-		paddingVertical: 8,
+		paddingVertical: 8, 
 		marginHorizontal: 8
 	}
 })

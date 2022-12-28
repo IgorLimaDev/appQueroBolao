@@ -1,6 +1,6 @@
 import React from "react";
 import {Text, Image, View, Button, StyleSheet, TouchableOpacity, Alert} from "react-native";
-import {cart, pushCart, retrieveCart} from "../services/Cart.js";
+import {cart, pushCart, retrieveCart, clearCart} from "../services/Cart.js";
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -10,7 +10,7 @@ export function Product({id, nome, preco, path, onPress}) {
 
 
 	return (
-		<TouchableOpacity
+		<View
 		style={styles.card}
 		onPress={onPress}
 		>
@@ -24,11 +24,12 @@ export function Product({id, nome, preco, path, onPress}) {
 			<Button
   				title="Adicionar ao Carrinho"
 				onPress={() => {
-					pushCart({id: id, nome: nome, preco: preco});
+					pushCart({id: id, nome: nome, preco: preco});	
+					Alert.alert("Sucesso", "Produto adicionado ao carrinho com sucesso.");
 				}}
 			/>
 			
-		</TouchableOpacity>
+		</View>
 	)
 }
 
@@ -38,7 +39,8 @@ const styles = StyleSheet.create({
 		borderRadius: 16,
 		alignItems: "center",
 		justifyContent: "center",
-		marginTop: "4%"
+		marginTop: "4%",
+		paddingBottom:20
 	},
 	image: {
 		width: "100%",
